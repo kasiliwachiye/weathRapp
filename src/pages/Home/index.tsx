@@ -1,21 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StatusBar, TextInput } from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 
+import CardStatus from "../../components/CardStatus";
 import CardMain from "../../components/CardMain";
 import styles from "./styles";
 
-// https://api.openweathermap.org/data/2.5/weather?q=Nairobi,BR&appid=ce1dd709128390b8ac3e1a7de8c34810
+// https://api.openweathermap.org/data/2.5/weather?q=Nairobi,KE&appid=ce1dd709128390b8ac3e1a7de8c34810
 
 import { variables } from "../../theme";
 import api from "../../services";
+export interface Data {
+  city: String;
+  uf: String;
+  temp: number;
+  temp_min: number;
+  temp_max: number;
+}
 
 const Home = () => {
   const [nameCity, setNameCity] = useState("");
+  const [error, setError] = useState(false);
+  const [data, setData] = useState<Data>({} as Data);
 
-  async function handleCity(name: String) {
-    return api.get(`?q=Nairobi,KE`).then((res) => console.log(res.data));
+  async function handleCity() {
+    return api
+      .get(`?q=${nameCity}`)
+      .then((res) =>
+        setData({
+          city: res.data.name,
+          uf: res.data.sys.country,
+          temp: res.data.main.temp,
+          temp_min: res.data.main.temp_min,
+          temp_max: res.data.main.temp_max,
+        })
+      )
+      .catch((error) => {
+        setData({} as Data);
+        setError(true);
+      });
   }
+
+  useEffect(() => {
+    if (nameCity === "") {
+      return setError(false);
+    }
+  }, [nameCity]);
 
   return (
     <View style={styles.container}>
@@ -53,8 +83,9 @@ const Home = () => {
               color={variables.colors.white500}
             />
             <TextInput
-              placeholder="City Name"
+              placeholder="City"
               placeholderTextColor={variables.colors.white500}
+              selectionColor={variables.colors.white500 + "18"}
               autoCapitalize="words"
               style={styles.input}
               onChangeText={(value) => setNameCity(value)}
@@ -68,16 +99,19 @@ const Home = () => {
               name="navigation"
               size={22}
               color={variables.colors.white500}
-              onPress={() => handleCity("Nairobi,KE")}
+              onPress={() => handleCity()}
             />
           </View>
         </View>
       </View>
 
       <View style={[styles.body, { marginTop: -132 }]}>
-        <CardMain />
-
-        <Text>Additional Information</Text>
+        {data.uf?.length > 0 ? (
+          <CardMain data={data} />
+        ) : (
+          <CardStatus error={error} />
+        )}
+        <Text>More Info</Text>
       </View>
     </View>
   );
