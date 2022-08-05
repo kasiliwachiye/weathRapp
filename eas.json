@@ -10,7 +10,7 @@
     "preview": {
       "android": {
         "buildType": "apk",
-        "gradleCommand": ":app:gradlew assemble --warning-mode=all"
+        "gradleCommand": ":app:assembleRelease --warning-mode=all"
       }
     },
     "production": {}
