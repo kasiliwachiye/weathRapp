@@ -10,7 +10,7 @@ const Tag: React.FC = () => {
       <View>
         <Text style={styles.title}>Your location</Text>
         <Text style={styles.text}>
-          Search using your {"\n"}current location.
+          Type city into search bar {"\n"} and click enter.
         </Text>
         <View style={styles.thumb}>
           <Image style={styles.img} source={location} resizeMode="contain" />
