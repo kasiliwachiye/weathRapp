@@ -8,7 +8,9 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    margin: 24,
+    marginBottom: 24,
+    marginLeft: 24,
+    marginRight: 24,
   },
 
   cardHeader: {
@@ -48,15 +50,15 @@ const styles = StyleSheet.create({
 
   searchBtn: {
     height: 64,
-    textAlign: "center",
-    textAlignVertical: "center",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 12,
     backgroundColor: variables.colors.white500 + "16",
   },
 
-  title: {
+  info: {
     textAlign: "center",
-    color: variables.colors.white500,
+    color: variables.colors.gray500,
     fontFamily: variables.fontFamily.semiBold,
     fontSize: variables.fontSize.h4,
   },

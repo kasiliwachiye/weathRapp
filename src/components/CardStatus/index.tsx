@@ -19,7 +19,7 @@ const CardStatus: React.FC<Props> = ({ error }) => {
       />
       {error ? (
         <View>
-          <Text style={styles.title}>💩</Text>
+          <Text style={styles.title}>Oh 💩!</Text>
           <Text style={styles.text}>
             No results{`\n`}found from your search.
           </Text>
@@ -28,7 +28,7 @@ const CardStatus: React.FC<Props> = ({ error }) => {
         <View>
           <Text style={styles.title}>Search.</Text>
           <Text style={styles.text}>
-            search by city name{`\n`}​​to see details.
+            Search by city name{`\n`}​​to see details.
           </Text>
         </View>
       )}

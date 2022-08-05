@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StatusBar, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StatusBar,
+  ActivityIndicator,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { Feather as Icon } from "@expo/vector-icons";
 
+import CardDetail from "../../components/CardDetail";
 import CardStatus from "../../components/CardStatus";
 import CardMain from "../../components/CardMain";
 import styles from "./styles";
-
-// https://api.openweathermap.org/data/2.5/weather?q=Nairobi,KE&appid=ce1dd709128390b8ac3e1a7de8c34810
 
 import { variables } from "../../theme";
 import api from "../../services";
@@ -18,25 +25,50 @@ export interface Data {
   temp_max: number;
 }
 
+interface Details {
+  wind: number;
+  visibility: number;
+  humidity: number;
+  clouds: number;
+}
+
 const Home = () => {
   const [nameCity, setNameCity] = useState("");
   const [error, setError] = useState(false);
+
   const [data, setData] = useState<Data>({} as Data);
+  const [details, setDetails] = useState<Details>({} as Details);
+
+  const [loading, setLoading] = useState(false);
 
   async function handleCity() {
+    setLoading(true);
     return api
       .get(`?q=${nameCity}`)
-      .then((res) =>
+      .then((res) => {
+        const data = res.data;
+
         setData({
-          city: res.data.name,
-          uf: res.data.sys.country,
-          temp: res.data.main.temp,
-          temp_min: res.data.main.temp_min,
-          temp_max: res.data.main.temp_max,
-        })
-      )
+          city: data.name,
+          uf: data.sys.country,
+          temp: data.main.temp,
+          temp_min: data.main.temp_min,
+          temp_max: data.main.temp_max,
+        });
+
+        setDetails({
+          wind: data.wind.speed,
+          visibility: data.visibility,
+          humidity: data.main.humidity,
+          clouds: data.clouds.all,
+        });
+
+        setLoading(false);
+      })
       .catch((error) => {
+        setLoading(false);
         setData({} as Data);
+        setDetails({} as Details);
         setError(true);
       });
   }
@@ -84,35 +116,84 @@ const Home = () => {
             />
             <TextInput
               placeholder="City"
-              placeholderTextColor={variables.colors.white500}
+              placeholderTextColor={variables.colors.white500 + "80"}
               selectionColor={variables.colors.white500 + "18"}
               autoCapitalize="words"
               style={styles.input}
-              onChangeText={(value) => setNameCity(value)}
               value={nameCity}
+              onChangeText={(value) => setNameCity(value)}
+              onSubmitEditing={() => handleCity()}
             />
           </View>
 
           <View style={{ marginLeft: "4%", width: "18%" }}>
-            <Icon
-              style={styles.searchBtn}
-              name="navigation"
-              size={22}
-              color={variables.colors.white500}
+            <TouchableOpacity
+              activeOpacity={0.8}
               onPress={() => handleCity()}
-            />
+              style={styles.searchBtn}
+            >
+              {loading ? (
+                <ActivityIndicator
+                  size="small"
+                  color={variables.colors.white500}
+                />
+              ) : (
+                <Icon
+                  name="navigation"
+                  size={22}
+                  color={variables.colors.white500}
+                />
+              )}
+            </TouchableOpacity>
           </View>
         </View>
       </View>
 
-      <View style={[styles.body, { marginTop: -132 }]}>
+      <View style={[styles.body, { marginTop: -134 }]}>
         {data.uf?.length > 0 ? (
           <CardMain data={data} />
         ) : (
           <CardStatus error={error} />
         )}
-        <Text>More Info</Text>
       </View>
+
+      <View style={styles.body}>
+        <Text style={styles.info}>More Info</Text>
+      </View>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 26,
+        }}
+      >
+        <CardDetail
+          nameIcon="droplet"
+          title="Humidity"
+          value={`${details.humidity ? details.humidity : 0}%`}
+        />
+
+        <CardDetail
+          nameIcon="wind"
+          title="Wind"
+          value={`${details.wind ? details.wind : 0} km/h`}
+        />
+
+        <CardDetail
+          nameIcon="sun"
+          title="Visibility"
+          value={`${details.visibility ? details.visibility : 0}km`}
+        />
+
+        <View style={{ marginRight: -12 }}>
+          <CardDetail
+            nameIcon="cloud"
+            title="Clouds"
+            value={`${details.clouds ? details.clouds : 0}%`}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
