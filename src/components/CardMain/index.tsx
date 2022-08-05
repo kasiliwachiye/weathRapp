@@ -10,13 +10,13 @@ const CardMain = () => {
       <View style={styles.inline}>
         <Icon name="map-pin" size={32} color={variables.colors.orange500} />
         <View style={{ marginLeft: 16 }}>
-          <Text style={styles.nameCity}>Canindé, CE</Text>
-          <Text style={styles.data}>Sábado, 09 de Maio</Text>
+          <Text style={styles.nameCity}>Nairobi, KE</Text>
+          <Text style={styles.data}></Text>
         </View>
       </View>
 
       <View style={[styles.inline, { justifyContent: "space-between" }]}>
-        <Text style={styles.tem}>-37°</Text>
+        <Text style={styles.tem}>21°</Text>
         <Image
           style={{ width: 98, height: 100 }}
           source={require("../../../assets/cloudy.png")}
