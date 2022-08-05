@@ -10,9 +10,11 @@ const Tag: React.FC = () => {
       <View>
         <Text style={styles.title}>Your location</Text>
         <Text style={styles.text}>
-        Search using your {"\n"}current location.
+          Search using your {"\n"}current location.
         </Text>
-        <Image style={styles.img} source={location} resizeMode="contain" />
+        <View style={styles.thumb}>
+          <Image style={styles.img} source={location} resizeMode="contain" />
+        </View>
       </View>
     </View>
   );
