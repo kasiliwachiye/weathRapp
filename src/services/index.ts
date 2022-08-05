@@ -1,5 +1,7 @@
 import axios from "axios";
-import { API_URL, APP_ID } from "../../.env.json";
+
+const API_URL = "https://api.openweathermap.org/data/2.5/weather";
+const APP_ID = "ce1dd709128390b8ac3e1a7de8c34810";
 
 const api = axios.create({
   baseURL: API_URL,
