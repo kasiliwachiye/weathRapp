@@ -8,7 +8,7 @@ import { variables } from "../../theme";
 import { Data } from "../../pages/home";
 
 import moment from "moment";
-import "moment/locale/pt-br";
+import "moment/locale/en-gb";
 
 interface Props {
   data: Data;
@@ -24,7 +24,7 @@ const CardMain: React.FC<Props> = ({ data }) => {
             {data.city}, {data.uf}
           </Text>
           <Text style={styles.data}>
-            {moment().format("dddd, D [de] MMMM")}
+            {moment().format("dddd, D MMMM")}
           </Text>
         </View>
       </View>

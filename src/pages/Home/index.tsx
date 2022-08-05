@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  StatusBar,
   ActivityIndicator,
   TextInput,
   TouchableOpacity,
@@ -17,6 +16,13 @@ import styles from "./styles";
 
 import { variables } from "../../theme";
 import api from "../../services";
+import Tag from "../../components/Tag";
+
+const humidity_img = require("../../../assets/humidity.png");
+const wind_img = require("../../../assets/wind.png");
+const sun_img = require("../../../assets/sun.png");
+const clouds_img = require("../../../assets/clouds.png");
+
 export interface Data {
   city: String;
   uf: String;
@@ -81,10 +87,6 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={variables.colors.orange500}
-        barStyle="light-content"
-      />
       <View style={styles.cardHeader}>
         <View style={styles.header}>
           <Icon
@@ -157,32 +159,32 @@ const Home = () => {
         )}
       </View>
 
-      <View style={styles.body}>
-        <Text style={styles.info}>More Info</Text>
-      </View>
-
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: 26,
         }}
+        style={{ marginTop: 6 }}
       >
         <CardDetail
           nameIcon="droplet"
           title="Humidity"
+          img={humidity_img}
           value={`${details.humidity ? details.humidity : 0}%`}
         />
 
         <CardDetail
           nameIcon="wind"
           title="Wind"
+          img={wind_img}
           value={`${details.wind ? details.wind : 0} km/h`}
         />
 
         <CardDetail
           nameIcon="sun"
           title="Visibility"
+          img={sun_img} 
           value={`${details.visibility ? details.visibility : 0}km`}
         />
 
@@ -190,10 +192,15 @@ const Home = () => {
           <CardDetail
             nameIcon="cloud"
             title="Clouds"
+            img={clouds_img}
             value={`${details.clouds ? details.clouds : 0}%`}
           />
         </View>
       </ScrollView>
+
+      <View style={styles.body}>
+        <Tag />
+      </View>
     </View>
   );
 };
